@@ -1,0 +1,114 @@
+<div class="min-h-screen flex flex-col items-center justify-start pt-8 bg-white">
+
+  <h1 class="text-2xl font-bold text-green-700 text-center mb-1">Welcome To</h1>
+  <h2 class="text-3xl font-bold text-green-700 text-center mb-4">SMARTSCHEDULE</h2>
+  <p class="text-xl font-bold text-center mb-6 underline">
+    - Say Goodbye to Scheduling Hassles!"
+  </p>
+
+  <h2 class="text-xl font-bold underline mb-6">Sign up/Register</h2>
+
+  <form
+    [formGroup]="form"
+    (ngSubmit)="onSubmit()"
+    class="bg-white w-full max-w-xl space-y-4 px-4"
+  >
+
+    <!-- First Name -->
+    <div class="flex items-center">
+      <label class="w-40 font-bold text-black text-left">First Name:</label>
+      <input
+        type="text"
+        formControlName="firstName"
+        class="w-full h-10 border-2 border-blue-500 rounded-full px-4 outline-none"
+      />
+    </div>
+    <small class="text-red-500 ml-40 text-xs" *ngIf="form.get('firstName')?.invalid && form.get('firstName')?.touched">
+      {{ getErrorMessage('firstName') }}
+    </small>
+
+    <!-- Second Name -->
+    <div class="flex items-center">
+      <label class="w-40 font-bold text-black text-left">Second Name:</label>
+      <input
+        type="text"
+        formControlName="secondName"
+        class="w-full h-10 border-2 border-blue-500 rounded-full px-4 outline-none"
+      />
+    </div>
+
+    <!-- Last Name -->
+    <div class="flex items-center">
+      <label class="w-40 font-bold text-black text-left">Last Name:</label>
+      <input
+        type="text"
+        formControlName="lastName"
+        class="w-full h-10 border-2 border-blue-500 rounded-full px-4 outline-none"
+      />
+    </div>
+    <small class="text-red-500 ml-40 text-xs" *ngIf="form.get('lastName')?.invalid && form.get('lastName')?.touched">
+      {{ getErrorMessage('lastName') }}
+    </small>
+
+    <!-- Registration No -->
+    <div class="flex items-center">
+      <label class="w-40 font-bold text-black text-left">Registration No:</label>
+      <input
+        type="text"
+        formControlName="registrationNo"
+        class="w-full h-10 border-2 border-blue-500 rounded-full px-4 outline-none"
+      />
+    </div>
+    <small class="text-red-500 ml-40 text-xs" *ngIf="form.get('registrationNo')?.invalid && form.get('registrationNo')?.touched">
+      {{ getErrorMessage('registrationNo') }}
+    </small>
+
+    <!-- Phone No -->
+    <div class="flex items-center">
+      <label class="w-40 font-bold text-black text-left">Phone No:</label>
+      <input
+        type="text"
+        formControlName="phone"
+        class="w-full h-10 border-2 border-blue-500 rounded-full px-4 outline-none"
+      />
+    </div>
+
+    <!-- Email -->
+    <div class="flex items-center">
+      <label class="w-40 font-bold text-black text-left">Email:</label>
+      <input
+        type="email"
+        formControlName="email"
+        class="w-full h-10 border-2 border-blue-500 rounded-full px-4 outline-none"
+      />
+    </div>
+    <small class="text-red-500 ml-40 text-xs" *ngIf="form.get('email')?.invalid && form.get('email')?.touched">
+      {{ getErrorMessage('email') }}
+    </small>
+
+    <!-- Password -->
+    <div class="flex items-center">
+      <label class="w-40 font-bold text-black text-left">Password:</label>
+      <input
+        type="password"
+        formControlName="password"
+        class="w-full h-10 border-2 border-blue-500 rounded-full px-4 outline-none"
+      />
+    </div>
+    <small class="text-red-500 ml-40 text-xs" *ngIf="form.get('password')?.invalid && form.get('password')?.touched">
+      {{ getErrorMessage('password') }}
+    </small>
+
+    <!-- Submit Button -->
+    <div class="flex justify-end pr-18">
+      <button
+        type="submit"
+        [disabled]="form.invalid"
+        class="w-48 h-10 bg-blue-600 text-white rounded-full font-bold shadow-lg hover:bg-blue-700 transition disabled:opacity-50"
+      >
+        Submit
+      </button>
+    </div>
+
+  </form>
+</div>

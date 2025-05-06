@@ -1,0 +1,62 @@
+<div class="flex justify-center">
+
+
+<div class="min-h-screen flex items-center justify-center bg-white">
+  <div class="text-center">
+    <h1 class="text-2xl font-bold text-green-600">Welcome To</h1>
+    <h1 class="text-3xl font-bold text-green-800 mb-2">SMARTSCHEDULE</h1>
+    <p class="text-lg font-bold text-black underline mb-6">- Say Goodbye to Scheduling Hassles!</p>
+
+    <h2 class="text-xl font-bold underline mb-6">Login</h2>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-5">
+      <div class="flex items-center justify-center">
+        <label for="registrationNo" class="mr-2 font-semibold text-black">RegistrationNo</label>
+        <input
+          id="registrationNo"
+          type="text"
+          formControlName="registrationNo"
+          class="w-80 h-10 px-4 border-2 border-blue-500 rounded-full focus:outline-none text-center"
+        />
+      </div>
+
+      <div class="flex items-center justify-center">
+        <label for="password" class="mr-10 font-semibold text-black">Password</label>
+        <input
+          id="password"
+          type="password"
+          formControlName="password"
+          class="w-80 h-10 px-4 border-2 border-blue-500 rounded-full focus:outline-none text-center"
+        />
+      </div>
+
+<!-- Login Button -->
+<div class="flex justify-end pr-8">
+  <button
+    type="submit"
+    [disabled]="form.invalid"
+    class="w-60 h-10 bg-blue-600 text-white rounded-full shadow-lg hover:bg-blue-700 font-bold"
+  >
+    Login
+  </button>
+</div>
+
+<!-- Register Button -->
+<div class="flex justify-end pr-8">
+  <button
+    routerLink="/register"
+    class="w-60 h-10 bg-blue-600 text-white rounded-full shadow-lg hover:bg-blue-700 font-bold"
+    type="button"
+  >
+    Sign up/Register
+  </button>
+</div>
+
+
+      <div *ngIf="error" class="text-center text-red-500 text-sm mt-2">
+        {{ error }}
+      </div>
+    </form>
+  </div>
+</div>
+</div>
