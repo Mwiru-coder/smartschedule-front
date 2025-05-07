@@ -20,7 +20,8 @@ import { VenueComponent } from './academic/venue/venue.component';
 import { SidebarComponent } from './layerout/sidebar/sidebar.component';
 import { HomeComponent } from './home/home.component';
 import { AuthLayoutComponent } from './layerout/auth-layout/auth-layout.component';
-
+import { InstructorComponent } from './academic/instructor/instructor.component';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 @NgModule({
   declarations: [
@@ -37,6 +38,7 @@ import { AuthLayoutComponent } from './layerout/auth-layout/auth-layout.componen
     ViewTimetableComponent,
     SidebarComponent,
     HomeComponent,
+    InstructorComponent,
   ],
   imports: [
     FormsModule,
@@ -45,6 +47,7 @@ import { AuthLayoutComponent } from './layerout/auth-layout/auth-layout.componen
     GraphQLModule,
     HttpClientModule,
     ReactiveFormsModule,
+    MatSnackBarModule,
     CommonModule
   ],
   providers: [],

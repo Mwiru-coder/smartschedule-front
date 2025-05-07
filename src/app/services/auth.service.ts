@@ -1,62 +1,79 @@
 import { Injectable } from '@angular/core';
 import { GraphqlService } from './graphql.service';
-import { Observable } from 'rxjs';
-import { tap, catchError } from 'rxjs/operators';
-
+import { Observable, throwError } from 'rxjs';
+import { tap, catchError, map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  private tokenKey: string = 'authToken'; // Define the tokenKey property
+  private readonly tokenKey = 'authToken';
 
-  constructor(private graphqlService: GraphqlService) { }
+  constructor(private graphqlService: GraphqlService) {}
 
+  /**
+   * Log in a user using registration number and password.
+   */
   login(registrationNo: string, password: string): Observable<any> {
     return this.graphqlService.loginUser(registrationNo, password).pipe(
       tap((response) => {
-        // Handle successful login response
-        console.log('Login successful:', response);
+        const token = response?.data?.customObtainJsonWebToken?.token;
+        if (token) {
+          localStorage.setItem(this.tokenKey, token);
+          console.log('Login successful:', response);
+        } else {
+          console.warn('Login response received, but no token found.');
+        }
       }),
       catchError((error) => {
-        // Handle error response
         console.error('Login error:', error);
-        throw error;
+        return throwError(() => error);
       })
     );
   }
 
-  register(
-    registrationNo: string,
-    email: string,
-    password: string,
-    firstName: string,
-    lastName: string
-  ): Observable<any> {
-    return this.graphqlService.register(registrationNo, email, password, firstName, lastName).pipe(
+  /**
+   * Register a new user.
+   */
+  register(userData: {
+    registrationNo: string;
+    email: string;
+    password: string;
+    firstName: string;
+    lastName: string;
+    secondName?: string;
+    phoneNo: string;
+    departmentId: string;
+    courseCodes: string[];
+  }): Observable<any> {
+    return this.graphqlService.register(userData).pipe(
       tap((response) => {
-        // Handle successful registration response
         console.log('Registration successful:', response);
       }),
       catchError((error) => {
-        // Handle error response
         console.error('Registration error:', error);
-        throw error;
+        return throwError(() => error);
       })
     );
   }
 
+  /**
+   * Log out the user by removing token.
+   */
+  logout(): void {
+    localStorage.removeItem(this.tokenKey);
+  }
 
-logout(): void {
-  localStorage.removeItem(this.tokenKey);
-}
+  
+  isLoggedIn(): boolean {
+    return !!this.getToken();
+  }
 
-isLoggedIn(): boolean {
-  return !!localStorage.getItem(this.tokenKey);
-}
-
-getToken(): string | null {
-  return localStorage.getItem(this.tokenKey);
-}
+  /**
+   * Get the current authentication token from localStorage.
+   */
+  getToken(): string | null {
+    return localStorage.getItem(this.tokenKey);
+  }
 }
