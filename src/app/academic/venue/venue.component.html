@@ -1,0 +1,89 @@
+<div class="max-w-3xl mx-auto p-6 bg-white shadow-lg rounded-lg">
+    <h2 class="text-2xl font-bold mb-4 text-center">Manage Venues</h2>
+  
+    <form (submit)="addVenue(); clearForm(); $event.preventDefault()" class="space-y-4">
+      <div class="flex flex-col gap-2">
+        <label class="font-medium">Venue Name</label>
+        <input
+          [(ngModel)]="venueForm.venueName"
+          name="venueName"
+          placeholder="Enter Venue Name"
+          class="input border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          required
+        />
+      </div>
+  
+      <div class="flex flex-col gap-2">
+        <label class="font-medium">Venue Number</label>
+        <input
+          [(ngModel)]="venueForm.venueNumber"
+          name="venueNumber"
+          placeholder="Enter Venue Number"
+          class="input border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          required
+        />
+      </div>
+  
+      <div class="flex flex-col gap-2">
+        <label class="font-medium">Capacity</label>
+        <input
+          [(ngModel)]="venueForm.capacity"
+          name="capacity"
+          type="number"
+          placeholder="Enter Capacity"
+          class="input border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          required
+        />
+      </div>
+  
+      <div class="flex justify-end gap-3 mt-4">
+        <button
+          class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition duration-300"
+          type="submit">
+          Save Venue
+        </button>
+        <button
+          class="px-4 py-2 bg-gray-400 text-white rounded-lg hover:bg-gray-500 transition duration-300"
+          type="button"
+          (click)="clearForm()">
+          Clear
+        </button>
+      </div>
+    </form>
+  </div>
+  
+  <div class="max-w-3xl mx-auto mt-8">
+    <h3 class="text-xl font-bold mb-2 text-center">Venues List</h3>
+    <div class="overflow-x-auto">
+      <table class="min-w-full bg-white shadow-md rounded-lg overflow-hidden">
+        <thead class="bg-indigo-600 text-white">
+          <tr>
+            <th class="p-4 text-left">Name</th>
+            <th class="p-4 text-left">Number</th>
+            <th class="p-4 text-left">Capacity</th>
+            <th class="p-4 text-center">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let venue of venues" class="border-b hover:bg-gray-50">
+            <td class="p-4">{{ venue.venueName }}</td>
+            <td class="p-4">{{ venue.venueNumber }}</td>
+            <td class="p-4">{{ venue.capacity }}</td>
+            <td class="p-4 text-center space-x-2">
+              <button
+                class="px-3 py-1 text-white bg-blue-500 rounded-lg hover:bg-blue-600 transition duration-300"
+                (click)="editVenue(venue)">
+                Edit
+              </button>
+              <button
+                class="px-3 py-1 text-white bg-red-500 rounded-lg hover:bg-red-600 transition duration-300"
+                (click)="deleteVenue(venue.venueNumber)">
+                Delete
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  

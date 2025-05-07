@@ -1,0 +1,44 @@
+<div class="flex h-screen">
+  <!-- Sidebar -->
+  <div 
+    class="bg-gray-700 text-white flex flex-col transition-all duration-300"
+    [ngClass]="{ 'w-64': sidebarOpen, 'w-16': !sidebarOpen }"
+  >
+    <div class="flex items-center justify-center h-24 border-b border-gray-600" *ngIf="sidebarOpen">
+      <div class="text-center">
+        <i class="fas fa-user-circle text-4xl mb-1"></i>
+        <p>Username</p>
+      </div>
+    </div>
+
+    <nav class="flex-1 mt-2">
+      <ul>
+        <li
+          *ngFor="let item of menuItems"
+          class="hover:bg-black px-4 py-3 cursor-pointer flex items-center gap-2 transition-all"
+          [ngClass]="{ 'bg-black': activeTab === item.key, 'justify-center': !sidebarOpen }"
+          (click)="setActive(item.key, item.route)"
+        >
+          <i [class]="item.icon"></i>
+          <span *ngIf="sidebarOpen">{{ item.label }}</span>
+        </li>
+      </ul>
+    </nav>
+  </div>
+
+  <!-- Main Content -->
+  <div class="flex-1 p-6">
+    <!-- Top Bar -->
+    <div class="flex justify-end items-center h-16 border-b">
+      <i class="fas fa-bars text-2xl cursor-pointer" (click)="toggleSidebar()"></i>
+    </div>
+
+    <!-- Dynamic Content -->
+    <div class="mt-10">
+      <h1 class="text-2xl font-semibold text-gray-700 capitalize">
+        {{ activeTab }} page
+      </h1>
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>
