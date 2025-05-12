@@ -1,37 +1,47 @@
 import { Injectable } from '@angular/core';
 import { GraphqlService } from './graphql.service';
-import { Observable, throwError } from 'rxjs';
+import { Observable, of, throwError } from 'rxjs';
 import { tap, catchError, map } from 'rxjs/operators';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-
+  isauthenticated = false;
   private readonly tokenKey = 'authToken';
+  private readonly userKey = 'authUser';
 
-  constructor(private graphqlService: GraphqlService) {}
-
-  /**
-   * Log in a user using registration number and password.
-   */
-  login(registrationNo: string, password: string): Observable<any> {
+  constructor(
+    private graphqlService: GraphqlService,
+    private router: Router
+  ) {}
+  login(registrationNo: string, password: string): Observable<boolean> {
     return this.graphqlService.loginUser(registrationNo, password).pipe(
-      tap((response) => {
-        const token = response?.data?.customObtainJsonWebToken?.token;
+      map((data) => {
+        const token = data?.customObtainJsonWebToken?.token;
+        const user = data?.customObtainJsonWebToken?.user;
+  
         if (token) {
           localStorage.setItem(this.tokenKey, token);
-          console.log('Login successful:', response);
+          if (user) {
+            localStorage.setItem(this.userKey, JSON.stringify(user));
+          }
+          console.log('Login successful:', data);
+          return true;
         } else {
           console.warn('Login response received, but no token found.');
+          return false;
         }
       }),
       catchError((error) => {
         console.error('Login error:', error);
-        return throwError(() => error);
+        return of(false);
       })
     );
   }
+  
+  
 
   /**
    * Register a new user.
@@ -59,13 +69,16 @@ export class AuthService {
   }
 
   /**
-   * Log out the user by removing token.
+   * Log out the user by removing token and user data.
    */
   logout(): void {
     localStorage.removeItem(this.tokenKey);
+    localStorage.removeItem(this.userKey);
   }
 
-  
+  /**
+   * Check if the user is logged in.
+   */
   isLoggedIn(): boolean {
     return !!this.getToken();
   }
@@ -75,5 +88,20 @@ export class AuthService {
    */
   getToken(): string | null {
     return localStorage.getItem(this.tokenKey);
+  }
+
+  /**
+   * Get the currently logged-in user from localStorage.
+   */
+  getUser(): any | null {
+    const user = localStorage.getItem(this.userKey);
+    return user ? JSON.parse(user) : null;
+  }
+
+  /**
+   * Fetch departments and courses.
+   */
+  getDepartmentAndCourses(): Observable<any> {
+    return this.graphqlService.getDepartmentsAndCourses();
   }
 }

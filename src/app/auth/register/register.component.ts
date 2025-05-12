@@ -1,38 +1,50 @@
-import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
+import { GraphqlService } from 'src/app/services/graphql.service';
+import { GET_DEPARTMENTS_AND_COURSES_QUERY } from 'src/app/query-mutation';
 
 @Component({
   selector: 'app-register',
-  templateUrl: './register.component.html'
+  templateUrl: './register.component.html',
 })
-export class RegisterComponent {
+export class RegisterComponent implements OnInit {
   form: FormGroup;
+  departments: any[] = [];
+  courses: any[] = [];
   error = '';
   success = '';
 
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
+    private graphqlService: GraphqlService,
     private router: Router
   ) {
     this.form = this.fb.group({
       registrationNo: ['', Validators.required],
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
-      secondName: [''], // optional, but you can make it required
+      secondName: [''],
       phoneNo: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(4)]],
       departmentId: ['', Validators.required],
-      courseCodes: this.fb.array([], Validators.required), // Must push at least one
+      courseCodes: [[], Validators.required],
     });
   }
 
-  // For now, just hardcode one course code for demo purposes
-  ngOnInit() {
-    (this.form.get('courseCodes') as FormArray).push(this.fb.control('1'));
+  ngOnInit(): void {
+    this.graphqlService.executeQuery(GET_DEPARTMENTS_AND_COURSES_QUERY, {}).subscribe({
+      next: (result) => {
+        this.departments = result.data.department;
+        this.courses = result.data.course;
+      },
+      error: (err) => {
+        console.error('Failed to load departments or courses', err);
+      },
+    });
   }
 
   onSubmit() {
@@ -41,18 +53,27 @@ export class RegisterComponent {
       return;
     }
 
-    const userData = this.form.value;
+    const formValue = this.form.value;
+
+    const userData = {
+      registrationNo: formValue.registrationNo,
+      firstName: formValue.firstName,
+      lastName: formValue.lastName,
+      secondName: formValue.secondName || '',
+      phoneNo: formValue.phoneNo,
+      email: formValue.email,
+      password: formValue.password,
+      departmentId: formValue.departmentId,
+      courseCodes: formValue.courseCodes,
+    };
 
     this.authService.register(userData).subscribe({
-      next: (result) => {
-        if (result) {
-          this.success = 'Registration successful! Redirecting to login...';
+      next: (result: any) => {
+        if (result?.data?.createUser?.user) {
+          this.success = 'Registration successful! Redirecting...';
           this.error = '';
           this.form.reset();
-
-          setTimeout(() => {
-            this.router.navigate(['/login']);
-          }, 1500);
+          setTimeout(() => this.router.navigate(['/login']), 1500);
         } else {
           this.error = 'Registration failed. Please try again.';
         }
@@ -60,7 +81,7 @@ export class RegisterComponent {
       error: (err) => {
         this.error = 'Something went wrong. Please try again.';
         console.error(err);
-      }
+      },
     });
   }
 

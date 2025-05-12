@@ -2,12 +2,12 @@
   <!-- Sidebar -->
   <div 
     class="bg-gray-700 text-white flex flex-col transition-all duration-300"
-    [ngClass]="{ 'w-64': sidebarOpen, 'w-16': !sidebarOpen }"
+    [ngClass]="{ 'w-36': sidebarOpen, 'w-14': !sidebarOpen }"
   >
     <div class="flex items-center justify-center h-24 border-b border-gray-600" *ngIf="sidebarOpen">
       <div class="text-center">
         <i class="fas fa-user-circle text-4xl mb-1"></i>
-        <p>Username</p>
+        <p>{{username}}</p>
       </div>
     </div>
 
@@ -35,9 +35,6 @@
 
     <!-- Dynamic Content -->
     <div class="mt-10">
-      <h1 class="text-2xl font-semibold text-gray-700 capitalize">
-        {{ activeTab }} page
-      </h1>
       <router-outlet></router-outlet>
     </div>
   </div>

@@ -1,3 +1,4 @@
+// app-routing.module.ts
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './auth/login/login.component';
@@ -12,33 +13,34 @@ import { GroupComponent } from './academic/group/group.component';
 import { ScheduleComponent } from './academic/schedule/schedule.component';
 import { ViewTimetableComponent } from './academic/view-timetable/view-timetable.component';
 import { InstructorComponent } from './academic/instructor/instructor.component';
+import { AuthGuard } from './auth.guard'; // Make sure path is correct
+
 const routes: Routes = [
   {
     path: '',
     component: SidebarComponent,
+    canActivate: [AuthGuard], 
     children: [
-      {path:'',redirectTo:'home',pathMatch:'full'},
+      { path: '', redirectTo: 'home', pathMatch: 'full' },
       { path: 'home', component: HomeComponent },
-      { path: 'venues', component: VenueComponent }, // Add other pages here},
-      {path: 'program', component: ProgramComponent},
-      {path: 'courses', component: CourseComponent},
-      {path: 'groups', component: GroupComponent},
-      {path: 'schedule', component: ScheduleComponent},
-      {path: 'view-timetable', component: ViewTimetableComponent},
-  {
-    path: 'instructor',
-    component: InstructorComponent
-  },    ],
+      { path: 'venues', component: VenueComponent },
+      { path: 'program', component: ProgramComponent },
+      { path: 'courses', component: CourseComponent },
+      { path: 'groups', component: GroupComponent },
+      { path: 'schedule', component: ScheduleComponent },
+      { path: 'view-timetable', component: ViewTimetableComponent },
+      { path: 'instructor', component: InstructorComponent },
+    ],
   },
   {
     path: '',
     component: AuthLayoutComponent,
     children: [
       { path: 'login', component: LoginComponent },
-      { path: 'register', component: RegisterComponent }
+      { path: 'register', component: RegisterComponent },
     ],
   },
-  { path: '**', redirectTo: 'login' },
+  { path: '**', redirectTo: 'login' }, // fallback
 ];
 
 @NgModule({

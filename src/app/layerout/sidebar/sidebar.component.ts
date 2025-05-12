@@ -47,6 +47,7 @@ import { Router } from '@angular/router';
 export class SidebarComponent {
   sidebarOpen = true;
   activeTab = 'home';
+  username = 'Admin';
 
   menuItems = [
     { label: 'Home', icon: 'fas fa-table-cells', key: 'home', route: '/home' },

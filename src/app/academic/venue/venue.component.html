@@ -1,46 +1,50 @@
 <div class="max-w-3xl mx-auto p-6 bg-white shadow-lg rounded-lg">
-    <h2 class="text-2xl font-bold mb-4 text-center">Manage Venues</h2>
+    <h2 class="text-2xl font-bold mb-4 absolute top-10 right-20 text-black-500">Manage Venues</h2>
   
-    <form (submit)="addVenue(); clearForm(); $event.preventDefault()" class="space-y-4">
+    <form [formGroup]="venueForm" (ngSubmit)="saveVenue()" class="space-y-4">
       <div class="flex flex-col gap-2">
         <label class="font-medium">Venue Name</label>
         <input
-          [(ngModel)]="venueForm.venueName"
-          name="venueName"
+          formControlName="venueName"
           placeholder="Enter Venue Name"
           class="input border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-          required
         />
+        <div *ngIf="venueForm.get('venueName')?.invalid && venueForm.get('venueName')?.touched" class="text-red-500">
+          Venue Name is required (min 3 characters).
+        </div>
       </div>
-  
+    
       <div class="flex flex-col gap-2">
         <label class="font-medium">Venue Number</label>
         <input
-          [(ngModel)]="venueForm.venueNumber"
-          name="venueNumber"
+          formControlName="venueNumber"
           placeholder="Enter Venue Number"
           class="input border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-          required
         />
+        <div *ngIf="venueForm.get('venueNumber')?.invalid && venueForm.get('venueNumber')?.touched" class="text-red-500">
+          Venue Number is required.
+        </div>
       </div>
-  
+    
       <div class="flex flex-col gap-2">
         <label class="font-medium">Capacity</label>
         <input
-          [(ngModel)]="venueForm.capacity"
-          name="capacity"
+          formControlName="capacity"
           type="number"
           placeholder="Enter Capacity"
           class="input border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-          required
         />
+        <div *ngIf="venueForm.get('capacity')?.invalid && venueForm.get('capacity')?.touched" class="text-red-500">
+          Capacity is required (min 1).
+        </div>
       </div>
-  
+    
       <div class="flex justify-end gap-3 mt-4">
         <button
           class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition duration-300"
-          type="submit">
-          Save Venue
+          type="submit"
+          [disabled]="venueForm.invalid">
+          {{ isEditMode ? 'Update Venue' : 'Save Venue' }}
         </button>
         <button
           class="px-4 py-2 bg-gray-400 text-white rounded-lg hover:bg-gray-500 transition duration-300"
@@ -50,6 +54,7 @@
         </button>
       </div>
     </form>
+    
   </div>
   
   <div class="max-w-3xl mx-auto mt-8">

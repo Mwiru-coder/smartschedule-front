@@ -2,7 +2,7 @@ import { gql } from 'apollo-angular';
 
 // Login Mutation=================================================
 export const LOGIN_MUTATION = gql`
-  mutation CustomLogin($registrationNo: String!, $password: String!) {
+  mutation Login($registrationNo: String!, $password: String!) {
     customObtainJsonWebToken(registrationNo: $registrationNo, password: $password) {
       token
       user {
@@ -15,21 +15,41 @@ export const LOGIN_MUTATION = gql`
   }
 `;
 
-
- 
-
-// Create User Mutation=================================================
+// Get All Users Query=================================================
+export const GET_ALL_USERS_QUERY = gql`
+  query {
+    user {
+      registrationNo
+      firstName
+      lastName
+      email
+      phoneNo
+      departmentId {
+        departmentId
+        departmentName
+      }
+      courseCode {
+        courseCode
+        courseName
+      }
+      lastLogin
+      isActive
+      isStaff
+    }
+  }
+`;
+// Get User By Query=================================================
 export const CREATE_USER_MUTATION = gql`
   mutation CreateUser(
     $registrationNo: String!
     $firstName: String!
     $lastName: String!
-    $secondName: String!
+    $secondName: String
     $phoneNo: String!
     $email: String!
-    $password: String!
+    $password: String
     $departmentId: ID!
-    $courseCodes: [ID!]!
+    $courseCodes: [ID!]
   ) {
     createUser(
       registrationNo: $registrationNo
@@ -111,31 +131,6 @@ export const LOGOUT_MUTATION = gql`
     }
   }
 `;
-
-
-// export const GET_USER_QUERY = gql`
-//   query GetUser($registrationNo: String!) {
-//     user(registrationNo: $registrationNo) {
-//       registrationNo
-//       firstName
-//       lastName
-//       secondName
-//       email
-//       phoneNo
-//       departmentId {
-//         departmentId
-//         departmentName
-//       }
-//       courseCode {
-//         courseCode
-//         courseName
-//       }
-//     }
-//   }
-// `;
-
-
-
 // Venue Mutations=================================================
 export const ADD_VENUE_MUTATION = gql`
   mutation AddVenue($venueName: String!, $venueNumber: String!, $capacity: Int!) {
@@ -409,6 +404,21 @@ export const DELETE_GROUP_MUTATION = gql`
     deleteGroup(groupId: $groupId) {
       success
       message
+    }
+  }
+`;
+
+
+
+export const GET_DEPARTMENTS_AND_COURSES_QUERY = gql`
+  query {
+    department{
+      departmentId
+      departmentName
+    }
+    course {
+      courseCode
+      courseName
     }
   }
 `;

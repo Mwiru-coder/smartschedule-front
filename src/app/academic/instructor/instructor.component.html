@@ -1,73 +1,98 @@
-<!-- instructor.component.html -->
 <div class="max-w-3xl mx-auto p-6 bg-white shadow-lg rounded-lg">
-    <h2 class="text-2xl font-bold mb-4 text-center">Manage Instructors</h2>
-  
-    <form (submit)="isEditMode ? updateUser() : addUser(); clearForm(); $event.preventDefault()" class="space-y-4">
-      <div class="flex flex-col gap-2">
+  <h2 class="text-2xl font-bold mb-4 text-cente  absolute top-10 right-20 text-black-500">Manage Instructors</h2>
+
+  <form (submit)="isEditMode ? updateUser() : addUser(); $event.preventDefault()" class="space-y-4">
+    <div class="grid grid-cols-2 gap-4">
+      <div class="flex flex-col">
         <label class="font-medium">Registration Number</label>
-        <input [(ngModel)]="userForm.registrationNo" name="registrationNo" placeholder="Enter Registration Number" class="input border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" required />
+        <input [(ngModel)]="userForm.registrationNo" name="registrationNo" placeholder="Enter Registration Number" class="input border rounded p-2" required />
       </div>
-  
-      <div class="flex flex-col gap-2">
+
+      <div class="flex flex-col">
         <label class="font-medium">First Name</label>
-        <input [(ngModel)]="userForm.firstName" name="firstName" placeholder="Enter First Name" class="input border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" required />
+        <input [(ngModel)]="userForm.firstName" name="firstName" placeholder="Enter First Name" class="input border rounded p-2" required />
       </div>
-  
-      <div class="flex flex-col gap-2">
+
+      <div class="flex flex-col">
+        <label class="font-medium">Second Name</label>
+        <input [(ngModel)]="userForm.secondName" name="secondName" placeholder="Enter Second Name" class="input border rounded p-2" required />
+      </div>
+
+      <div class="flex flex-col">
+        <label class="font-medium">Last Name</label>
+        <input [(ngModel)]="userForm.lastName" name="lastName" placeholder="Enter Last Name" class="input border rounded p-2" required />
+      </div>
+
+      <div class="flex flex-col">
+        <label class="font-medium">Email</label>
+        <input [(ngModel)]="userForm.email" name="email" type="email" placeholder="Enter Email" class="input border rounded p-2" required />
+      </div>
+
+      <div class="flex flex-col">
+        <label class="font-medium">Password</label>
+        <input [(ngModel)]="userForm.password" name="password" type="password" placeholder="Enter Password" class="input border rounded p-2" required />
+      </div>
+
+      <div class="flex flex-col">
         <label class="font-medium">Phone Number</label>
-        <input [(ngModel)]="userForm.phoneNo" name="phoneNo" placeholder="Enter Phone Number" class="input border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" required />
+        <input [(ngModel)]="userForm.phoneNo" name="phoneNo" placeholder="Enter Phone Number" class="input border rounded p-2" required />
       </div>
-  
-      <div class="flex flex-col gap-2">
-        <label class="font-medium">Department ID</label>
-        <input [(ngModel)]="userForm.departmentId" name="departmentId" placeholder="Enter Department ID" class="input border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" required />
+
+      <div class="flex flex-col">
+        <label class="font-medium">Department</label>
+        <select [(ngModel)]="userForm.departmentId" name="departmentId" class="input border rounded p-2" required>
+          <option value="">Select Department</option>
+          <option *ngFor="let department of departments" [value]="department.departmentId">{{ department.departmentName }}</option>
+        </select>
       </div>
-  
-      <div class="flex flex-col gap-2">
-        <label class="font-medium">Course Codes (Comma-separated)</label>
-        <input [(ngModel)]="userForm.courseCodes" name="courseCodes" placeholder="Enter Course Codes" class="input border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" required />
+
+      <div class="flex flex-col col-span-2">
+        <label class="font-medium">Course Codes (Select Multiple)</label>
+        <select [(ngModel)]="userForm.courseCodes" name="courseCodes" multiple class="input border rounded p-2" required>
+          <option *ngFor="let course of courses" [value]="course.courseCode">{{ course.courseCode }}</option>
+        </select>
       </div>
-  
-      <div class="flex justify-end gap-3 mt-4">
-        <button class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition duration-300" type="submit">
-          {{ isEditMode ? 'Update' : 'Add' }} User
-        </button>
-        <button class="px-4 py-2 bg-gray-400 text-white rounded-lg hover:bg-gray-500 transition duration-300" type="button" (click)="clearForm()">
-          Clear
-        </button>
-      </div>
-    </form>
-  </div>
-  
-  <!-- User List -->
-  <div class="max-w-3xl mx-auto mt-8">
-    <h3 class="text-xl font-bold mb-2 text-center">Instructor List</h3>
-    <div class="overflow-x-auto">
-      <table class="min-w-full bg-white shadow-md rounded-lg overflow-hidden">
-        <thead class="bg-indigo-600 text-white">
-          <tr>
-            <th class="p-4 text-left">Registration No</th>
-            <th class="p-4 text-left">Name</th>
-            <th class="p-4 text-left">Phone No</th>
-            <th class="p-4 text-center">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let user of users" class="border-b hover:bg-gray-50">
-            <td class="p-4">{{ user.registrationNo }}</td>
-            <td class="p-4">{{ user.firstName }}</td>
-            <td class="p-4">{{ user.phoneNo }}</td>
-            <td class="p-4 text-center space-x-2">
-              <button class="px-3 py-1 text-white bg-blue-500 rounded-lg hover:bg-blue-600 transition duration-300" (click)="editUser(user)">
-                Edit
-              </button>
-              <button class="px-3 py-1 text-white bg-red-500 rounded-lg hover:bg-red-600 transition duration-300" (click)="deleteUser(user.registrationNo)">
-                Delete
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
     </div>
+
+    <div class="flex justify-end gap-3 mt-4">
+      <button class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700" type="submit">
+        {{ isEditMode ? 'Update' : 'Add' }} User
+      </button>
+      <button class="px-4 py-2 bg-gray-400 text-white rounded-lg hover:bg-gray-500" type="button" (click)="clearForm()">
+        Clear
+      </button>
+    </div>
+  </form>
+</div>
+
+<!-- User List -->
+<div class="max-w-3xl mx-auto mt-8">
+  <h3 class="text-xl font-bold mb-2 text-center">Instructor List</h3>
+  <div class="overflow-x-auto">
+    <table class="min-w-full bg-white shadow-md rounded-lg overflow-hidden">
+      <thead class="bg-indigo-600 text-white">
+        <tr>
+          <th class="p-4 text-left">Registration No</th>
+          <th class="p-4 text-left">Name</th>
+          <th class="p-4 text-left">Phone No</th>
+          <th class="p-4 text-center">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of users" class="border-b hover:bg-gray-50">
+          <td class="p-4">{{ user.registrationNo }}</td>
+          <td class="p-4">{{ user.firstName }} {{ user.secondName }} {{ user.lastName }}</td>
+          <td class="p-4">{{ user.phoneNo }}</td>
+          <td class="p-4 text-center space-x-2">
+            <button class="px-3 py-1 text-white bg-blue-500 rounded-lg hover:bg-blue-600" (click)="editUser(user)">
+              Edit
+            </button>
+            <button class="px-3 py-1 text-white bg-red-500 rounded-lg hover:bg-red-600" (click)="deleteUser(user.registrationNo)">
+              Delete
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
-  
+</div>
